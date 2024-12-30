@@ -12,9 +12,11 @@ Polutan seperti ozon dan nitrogen dioksida tidak hanya berdampak pada kesehatan 
 
 ## Business Understanding
 
+Dengan meningkatnya polusi udara di daerah perkotaan, diperlukan sistem yang dapat memprediksi kualitas udara.
+
 ### Problem Statements
 
-Dengan meningkatnya polusi udara di daerah perkotaan, diperlukan sistem yang dapat memprediksi kualitas udara. Berdasarkan hal tersebut, batasan masalah yang dapat diselesaikan dalam proyek ini yaitu:
+Batasan masalah yang dapat diselesaikan dalam proyek ini yaitu:
 > Bagaimana membuat model _machine learning_ yang dapat digunakan untuk memprediksi kualitas udara?
 
 ### Goals
