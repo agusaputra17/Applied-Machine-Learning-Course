@@ -51,7 +51,8 @@ Berikut deskripsi tiap kolom dalam dataset yang digunakan.
 Berdasarkan tabel diatas, terdapat _missing value_ pada kolom `CO` sebanyak 99 baris dan pada kolom `NO2` sebanyak 42 baris.
 
 ### Outlier
-![outlier](https://github.com/user-attachments/assets/7564ae74-999f-4b19-916a-2822c99bf600)
+![outlier](https://github.com/user-attachments/assets/29b44ce5-df79-4b00-9753-1667882e11f6)
+
 
 Berdasarkan gambar di atas, terdapat outlier yang ditunjukkan dengan adanya titik-titik yang berada di luar batas whisker (garis vertikal yang menunjukkan jangkauan data non-outlier) pada masing-masing boxplot untuk setiap fitur, seperti CO, Ozone, PM10, PM25, NO2, dan Overall AQI Value. Outlier ini menunjukkan data yang berada jauh dari rentang nilai mayoritas.
 
