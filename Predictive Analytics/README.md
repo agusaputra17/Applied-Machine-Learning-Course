@@ -24,12 +24,9 @@ Batasan masalah yang dapat diselesaikan dalam proyek ini yaitu:
 > Memprediksi nilai AQI (Air Quality Index) berdasarkan parameter polusi udara menggunakan machine learning.
 
 ### Solution statements
-- Pemrosesan Data: Melakukan normalisasi data untuk memastikan semua parameter berada dalam skala yang sama.
-- Membagi data menjadi subset pelatihan dan validasi untuk menghindari overfitting.
-- Pemilihan Model: Menggunakan model Neural Networks (CNN + LSTM) untuk menangkap pola temporal.
-- Memanfaatkan teknik dropout untuk menghindari overfitting.
-- Evaluasi Model: Menggunakan Mean Absolute Error (MAE) sebagai metrik evaluasi.
-- Membandingkan prediksi model dengan data aktual melalui visualisasi.
+- Pemrosesan Data: Melakukan normalisasi data untuk memastikan semua parameter berada dalam skala yang sama. Membagi data menjadi subset pelatihan dan validasi untuk menghindari overfitting.
+- Pemilihan Model: Menggunakan model Neural Networks (CNN + LSTM) untuk menangkap pola temporal. Memanfaatkan teknik dropout untuk menghindari overfitting.
+- Evaluasi Model: Menggunakan Mean Absolute Error (MAE) sebagai metrik evaluasi. Membandingkan prediksi model dengan data aktual melalui visualisasi.
 
 ## Data Understanding
 ### Data Source
@@ -92,7 +89,7 @@ LSTM adalah varian dari Recurrent Neural Network (RNN) yang dirancang untuk mena
 - N_FUTURE: Panjang periode waktu yang diprediksi di masa depan, yaitu 7.
 - SHIFT: Perpindahan antara waktu saat ini ke waktu target prediksi, yaitu 1 (prediksi mulai dari waktu berikutnya).
   
-**Arsitektur Model**: 
+**Arsitektur Model** 
 
 ```
 model = tf.keras.models.Sequential([
@@ -131,6 +128,47 @@ model = tf.keras.models.Sequential([
 - Output Layer (Dense):
   - Dense(N_FEATURES): Layer output dengan jumlah unit sama dengan jumlah fitur (6).
 
+**Proses Kompilasi**
+```
+optimizer = tf.keras.optimizers.Adam(learning_rate=0.0001)
+model.compile(loss='mae', optimizer=optimizer, metrics=['mae'])
+```
+- Optimizer Adam digunakan dengan learning rate kecil (0.0001) untuk memastikan pembaruan parameter stabil dan konvergen secara bertahap.
+- Fungsi loss MAE (Mean Absolute Error) digunakan untuk menghitung rata-rata selisih absolut antara nilai aktual dan prediksi, cocok untuk tugas regresi.
+- Metrik evaluasi tambahan MAE digunakan untuk memantau performa model selama training.
+
+**Callback (ModelCheckpoint)**
+
+```
+cp_path = 'model/my_model.h5'
+checkpoint = ModelCheckpoint(cp_path, save_weights_only=True, save_best_only=True, monitor='val_loss', verbose=1)
+```
+- cp_path: Jalur file tempat model disimpan, dalam hal ini adalah 'model/my_model.h5'. File ini akan menyimpan bobot model terbaik selama proses pelatihan.
+- ModelCheckpoint : Menyimpan bobot model terbaik berdasarkan loss validasi selama proses training.
+- save_weights_only: Jika diatur ke True, hanya bobot model (weights) yang akan disimpan, bukan keseluruhan struktur model.
+Hal ini berguna untuk mengurangi ukuran file penyimpanan jika model besar.
+- monitor: Parameter ini menentukan metrik yang akan dipantau selama pelatihan.
+Dalam kasus ini, callback akan memantau nilai loss pada data validasi (val_loss).
+- verbose: Menentukan tingkat detail log. Jika diatur ke 1, proses penyimpanan model terbaik akan ditampilkan di output terminal.
+
+**Proses Training**
+
+```
+history = model.fit(train_set, 
+                    validation_data=valid_set, 
+                    epochs=100, 
+                    callbacks=[checkpoint])
+```
+
+- Dataset:
+  - train_set: Data pelatihan. Data ini berisi input dan label target yang digunakan untuk memperbarui bobot model.
+  - valid_set: Data validasi. Data validasi digunakan untuk mengevaluasi performa model pada data yang tidak dilihat selama pelatihan.
+- Epochs: Model dilatih selama 100 epoch, artinya model akan melihat seluruh data pelatihan 100 kali.
+- Callback: ModelCheckpoint digunakan untuk menyimpan bobot terbaik.
+
+Selama proses pelatihan, ModelCheckpoint secara otomatis mengevaluasi nilai val_loss pada setiap epoch.
+Jika nilai val_loss pada epoch tertentu lebih kecil dari nilai sebelumnya (lebih baik), maka callback akan menyimpan bobot model di jalur yang telah ditentukan (cp_path).
+ 
 ## Evaluation
 
 Mean Absolute Error (MAE) adalah salah satu metrik evaluasi yang umum digunakan untuk mengukur kesalahan dalam model regresi. MAE menghitung rata-rata dari nilai absolut selisih antara nilai prediksi dengan nilai aktual.
@@ -142,9 +180,9 @@ MAE = \frac{1}{n} \sum_{i=1}^{n} | y_i - \hat{y}_i |
 $$
 
 Keterangan:
-- $$y_i$$ : Nilai aktual  
-- $$\hat{y}_i\$$ : Nilai prediksi  
-- $$n$$ : Jumlah sampel  
+-  ![CodeCogsEqn](https://github.com/user-attachments/assets/8f961b74-4de2-4f8e-9046-45e200118934) : Nilai aktual  
+-  ![CodeCogsEqn (2)](https://github.com/user-attachments/assets/583de45d-b915-4236-a0e7-53a6e62b7486) : Nilai prediksi  
+-  ![CodeCogsEqn (3)](https://github.com/user-attachments/assets/b210f384-f5dd-416f-832c-88340b98ff1f) : Jumlah sampel  
 
 MAE memberikan gambaran langsung tentang rata-rata kesalahan prediksi model dalam satuan yang sama dengan data asli. Metrik ini mudah diinterpretasikan: semakin kecil nilai MAE, semakin baik kinerja model.
 
