@@ -116,8 +116,9 @@ Sistem tidak bisa merekomendasikan item yang populer di kalangan pengguna lain j
 Jika fitur atau atribut item terlalu kompleks, sistem bisa menjadi lambat atau tidak efektif tanpa preprocessing yang tepat.
 
 #### **TF-IDF Vectorizer**
+Pada tahap ini membangun sistem rekomendasi berdasarkan genre yang disukai pengguna. Pada tahap ini akan dicari bobot TF-IDF untuk setiap genre anime.
 
-
+#### **Cosine Similarity**
 
 ### 2. Colaborative Filtering
 Tahapan ini membahas mengenai model sisten rekomendasi yang Anda buat untuk menyelesaikan permasalahan. Sajikan top-N recommendation sebagai output.
